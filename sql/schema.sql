@@ -26,7 +26,6 @@ CREATE TABLE employee (
     first_name VARCHAR(30),
     last_name VARCHAR(30),
     role_id INT NOT NULL,
-    isManager BOOLEAN NOT NULL,
+    mgmt_id VARCHAR(30) NULL,
     PRIMARY KEY (id)
-    mgmt_id INT
 );
