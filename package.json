@@ -25,6 +25,7 @@
     "dotenv": "^10.0.0",
     "inquirer": "^8.2.0",
     "inquirer-confirm": "^2.0.7",
+    "mysql": "^2.18.1",
     "mysql2": "^2.3.2",
     "nodemon": "^2.0.13"
   }
