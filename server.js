@@ -154,11 +154,11 @@ function addDepartment() {
       },
     ])
     .then(function (response) {
-      newDepartment(response);
+      addDepartment(response);
     });
 }
 
-function newDepartment(data) {
+function addDepartment(data) {
   db.query(
     "INSERT INTO department SET ?",
     {
