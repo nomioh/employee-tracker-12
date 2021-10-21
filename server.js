@@ -53,7 +53,7 @@ function employeeApp() {
       choices: [
         {
           name: "View Departments",
-          value: "viewDeparments",
+          value: "viewDepartments",
         },
         {
           name: "View All Roles",
@@ -88,4 +88,35 @@ function employeeApp() {
     .then(function (res) {
       employeeApp(res.choices);
     });
+}
+
+// allows user to switch between options
+
+function menu(options) {
+  switch (options) {
+    case "viewDepartments":
+      viewDepartments();
+      break;
+    case "viewAllRoles":
+      viewAllRoles();
+      break;
+    case "viewAllEmployees":
+      viewAllEmployees();
+      break;
+    case "addDepartment":
+      addDepartment();
+      break;
+    case "addRole":
+      addRole();
+      break;
+    case "addEmployee":
+      addEmployee();
+      break;
+    case "updateEmployeeRole":
+      updateEmployeeRole();
+      break;
+    case "finish":
+      finish();
+      break;
+  }
 }
