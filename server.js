@@ -3,6 +3,7 @@ const confirm = require("inquirer-confirm");
 const db = require("./db/connection");
 require("dotenv").config();
 const cTable = require("console.table");
+const { end } = require("./db/connection");
 
 // create the connection to mysql database
 db.connect(function (error) {
@@ -37,8 +38,8 @@ db.connect(function (error) {
   function employeeApp() {
     inquirer
       .prompt({
-        name: "choices",
         type: "list",
+        name: "choices",
         message: "What would you like to do?",
         choices: [
           {
@@ -80,8 +81,6 @@ db.connect(function (error) {
       });
   }
 
-  // allows user to switch between options
-
   function menu(options) {
     switch (options) {
       case "viewDepartments":
@@ -106,7 +105,7 @@ db.connect(function (error) {
         updateEmployeeRole();
         break;
       case "finish":
-        finish();
+        end();
     }
   }
 });
@@ -144,21 +143,27 @@ function addDepartment() {
       },
     ])
     .then(function (response) {
-      addDepartment(response);
+      newDepartment(response);
     });
 }
 
-function addDepartment(data) {
-  db.query(
-    "INSERT INTO department SET ?",
-    {
-      name: data.name,
-    },
-    function (error, res) {
-      if (error) throw error;
-    }
-  );
-  exitMenu();
+// function addDepartment(data) {
+//   db.query(
+//     "INSERT INTO department SET ?",
+//     {
+//       name: data.name,
+//     },
+//     function (error, res) {
+//       if (error) throw error;
+//     }
+//   );
+//   exitMenu();
+// }
+function viewDepartments() {
+  db.query("SELECT * FROM department", function (error, res) {
+    console.table(res);
+    exitMenu();
+  });
 }
 
 function addEmployee() {
@@ -248,6 +253,27 @@ function newEmployee(data) {
   exitMenu();
 }
 
+function updateEmployeeRole() {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Which employee is updating their role?",
+        name: "employee_id",
+        choices: employees,
+      },
+      {
+        type: "list",
+        message: "What is the new role?",
+        name: "titleID",
+        choices: roles,
+      },
+    ])
+    .then(function (response) {
+      updateRole(response);
+    });
+}
+
 function updateRole(data) {
   db.query(
     `UPDATE employee SET role_id = ${data.titleID} WHERE id=${data.employeesID}`,
@@ -275,6 +301,6 @@ function exitMenu() {
 
 function exit() {
   console.log("Exiting Employee Manager App");
-  db.end();
+  db.exit();
   process.exit();
 }
