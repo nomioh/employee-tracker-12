@@ -170,3 +170,69 @@ function newDepartment(data) {
   );
   exitMenu();
 }
+
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the employee's first name?",
+        name: "firstName",
+      },
+      {
+        type: "input",
+        message: "What is the employee's last name?",
+        name: "lastName",
+      },
+      {
+        type: "list",
+        message: "What is the title of the employee?",
+        name: "title",
+        choices: roles,
+      },
+      {
+        type: "list",
+        message: "Who is the manager of the employee?",
+        name: "manager",
+        choices: employees,
+      },
+    ])
+    .then(function (response) {
+      newEmployee(response);
+    });
+}
+
+function addRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the name of the new role?",
+        name: "title",
+      },
+      {
+        type: "input",
+        message: "What department does this new role belong to?",
+        name: "id",
+        choices: dept,
+      },
+    ])
+    .then(function (response) {
+      addNewRole(response);
+    });
+}
+
+function addNewRole(data) {
+  db.query(
+    "INSTERT INTO role SET ?",
+    {
+      title: data.title,
+      salary: data.salary,
+      department_id: data.id,
+    },
+    function (error, res) {
+      if (error) throw error;
+    }
+  );
+  exitMenu();
+}
