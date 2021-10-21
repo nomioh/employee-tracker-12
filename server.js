@@ -216,6 +216,11 @@ function addRole() {
         name: "id",
         choices: dept,
       },
+      {
+        type: "list",
+        message: "what is the salary of the new role?",
+        name: "salary",
+      },
     ])
     .then(function (response) {
       addNewRole(response);
