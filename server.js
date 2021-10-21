@@ -25,61 +25,61 @@ db.connect(function (error) {
       value: role.id,
     }));
   });
+});
 
-  // database for employees
-  db.query("SELECT * FROM employee", function (error, res) {
-    employees = res.map((emp) => ({
-      name: `${emp.first_name} ${emp.last_name}`,
-      value: emp.id,
-    }));
-    employeeApp();
-  });
+// database for employees
+db.query("SELECT * FROM employee", function (error, res) {
+  employees = res.map((emp) => ({
+    name: `${emp.first_name} ${emp.last_name}`,
+    value: emp.id,
+  }));
+  employeeApp();
+});
 
-  function employeeApp() {
-    inquirer
-      .prompt({
-        type: "list",
-        name: "choices",
-        message: "What would you like to do?",
-        choices: [
-          {
-            name: "View Departments",
-            value: "viewDepartments",
-          },
-          {
-            name: "View All Roles",
-            value: "viewAllRoles",
-          },
-          {
-            name: "View All Employees",
-            value: "viewAllEmployees",
-          },
-          {
-            name: "Add New Department",
-            value: "addDepartment",
-          },
-          {
-            name: "All A Role",
-            value: "addRole",
-          },
-          {
-            name: "Add an Empolyee",
-            value: "addEmployee",
-          },
-          {
-            name: "Update Employee Role",
-            value: "updateEmployeeRole",
-          },
-          {
-            name: "Finish",
-            value: "finish",
-          },
-        ],
-      })
-      .then(function (res) {
-        menu(res.choices);
-      });
-  }
+function employeeApp() {
+  inquirer
+    .prompt({
+      type: "list",
+      name: "choices",
+      message: "What would you like to do?",
+      choices: [
+        {
+          name: "View Departments",
+          value: "viewDepartments",
+        },
+        {
+          name: "View All Roles",
+          value: "viewAllRoles",
+        },
+        {
+          name: "View All Employees",
+          value: "viewAllEmployees",
+        },
+        {
+          name: "Add New Department",
+          value: "addDepartment",
+        },
+        {
+          name: "All A Role",
+          value: "addRole",
+        },
+        {
+          name: "Add an Empolyee",
+          value: "addEmployee",
+        },
+        {
+          name: "Update Employee Role",
+          value: "updateEmployeeRole",
+        },
+        {
+          name: "Finish",
+          value: "finish",
+        },
+      ],
+    })
+    .then(function (res) {
+      menu(res.choices);
+    });
 
   function menu(options) {
     switch (options) {
@@ -108,7 +108,7 @@ db.connect(function (error) {
         end();
     }
   }
-});
+}
 
 // functions for each menu option
 function viewAllRoles() {
@@ -147,18 +147,19 @@ function addDepartment() {
     });
 }
 
-// function addDepartment(data) {
-//   db.query(
-//     "INSERT INTO department SET ?",
-//     {
-//       name: data.name,
-//     },
-//     function (error, res) {
-//       if (error) throw error;
-//     }
-//   );
-//   exitMenu();
-// }
+function newDepartment(data) {
+  db.query(
+    "INSERT INTO department SET ?",
+    {
+      name: data.name,
+    },
+    function (error, res) {
+      if (error) throw error;
+    }
+  );
+  exitMenu();
+}
+
 function viewDepartments() {
   db.query("SELECT * FROM department", function (error, res) {
     console.table(res);
