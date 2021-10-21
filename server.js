@@ -60,7 +60,7 @@ function employeeApp() {
           value: "addDepartment",
         },
         {
-          name: "All A Role",
+          name: "Add A Role",
           value: "addRole",
         },
         {
@@ -73,15 +73,15 @@ function employeeApp() {
         },
         {
           name: "Finish",
-          value: "finish",
+          value: "end",
         },
       ],
     })
     .then(function (res) {
-      menu(res.choices);
+      menuOptions(res.choices);
     });
 
-  function menu(options) {
+  function menuOptions(options) {
     switch (options) {
       case "viewDepartments":
         viewDepartments();
@@ -210,7 +210,7 @@ function addRole() {
         type: "input",
         message: "What department does this new role belong to?",
         name: "id",
-        choices: dept,
+        choices: department,
       },
       {
         type: "list",
@@ -219,11 +219,37 @@ function addRole() {
       },
     ])
     .then(function (response) {
-      addNewRole(response);
+      addANewRole(response);
     });
 }
 
-function addNewRole(data) {
+// Function to Add Role
+function addRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the name of the new role?",
+        name: "title",
+      },
+      {
+        type: "input",
+        message: "What is the salary of the new role?",
+        name: "salary",
+      },
+      {
+        type: "list",
+        message: "Which department is the new role in?",
+        name: "id",
+        choices: department_id,
+      },
+    ])
+    .then(function (response) {
+      addANewRole(response);
+    });
+}
+
+function addANewRole(data) {
   db.query(
     "INSTERT INTO role SET ?",
     {
@@ -237,6 +263,9 @@ function addNewRole(data) {
   );
   exitMenu();
 }
+
+//  add role inquirer
+//
 
 function newEmployee(data) {
   db.query(
