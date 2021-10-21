@@ -4,7 +4,18 @@ const mysql = require("mysql2");
 require("dotenv").config();
 const cTable = require("console.table");
 
-// create the connection to database
+const port = process.env.port || 3000;
+
+// mysql
+
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "Jingers.5",
+  database: "employees_db",
+});
+
+// create the connection to mysql database
 db.connect(function (error) {
   if (error) throw error;
   console.log("Welcome to Employee Manager");
@@ -29,59 +40,52 @@ db.connect(function (error) {
       value: emp.id,
     }));
   });
-  employeeApp();
 });
-// post in sql
 
-// const connection = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   database: "test",
-// });
-
-connection.connect();
+employeeApp();
 
 function employeeApp() {
   inquirer
     .prompt({
-      name: "action",
-      type: "rawlist",
+      name: "choices",
+      type: "list",
       message: "What would you like to do?",
-      choices: ["Add", "Delete", "View", "Update", "Exit"],
+      choices: [
+        {
+          name: "View Departments",
+          value: "viewDeparments",
+        },
+        {
+          name: "View All Roles",
+          value: "viewAllRoles",
+        },
+        {
+          name: "View All Employees",
+          value: "viewAllEmployees",
+        },
+        {
+          name: "Add New Department",
+          value: "addDepartment",
+        },
+        {
+          name: "All A Role",
+          value: "addRole",
+        },
+        {
+          name: "Add an Empolyee",
+          value: "addEmployee",
+        },
+        {
+          name: "Update Employee Role",
+          value: "updateEmployeeRole",
+        },
+        {
+          name: "Finish",
+          value: "finish",
+        },
+      ],
     })
-    .then((answer) => {
-      switch (answer.action) {
-        case "Add":
-          // code block
-          console.log("add");
-          break;
-        case "Delete":
-          // code block
-          console.log("delete");
-          break;
-        case "View":
-          // code block
-          console.log("view");
-          break;
-        case "Update":
-          // code block
-          console.log("update");
-          break;
-        case "Exit":
-          // code block
-          process.exit();
-          break;
-      }
-
-      // Use user feedback for... whatever!!
-    })
-    .catch((error) => {
-      if (error.isTtyError) {
-        // Prompt couldn't be rendered in the current environment
-        console.log("error with DB");
-      } else {
-        // Something else went wrong
-        console.log("Somethng else went wrong");
-      }
+    .then(function (res) {
+      employeeApp(res.choices);
     });
 }
