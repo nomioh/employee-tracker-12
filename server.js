@@ -241,3 +241,52 @@ function addNewRole(data) {
   );
   exitMenu();
 }
+
+function newEmployee(data) {
+  db.query(
+    "INSERT INTO employee SET ?",
+    {
+      first_name: data.firstName,
+      last_name: data.lastName,
+      role_id: data.title,
+      mgmt_id: data.manager,
+    },
+    function (error, res) {
+      if (error) throw error;
+    }
+  );
+  exitMenu();
+}
+
+function updateRole(data) {
+  db.query(
+    `UPDATE emplpoyee SET role_id = ${data.titleID} WHERE id=${data.employeesID}`,
+    function (error, res) {
+      if (error) throw error;
+    }
+  );
+  exitMenu();
+}
+
+//exit menu for user to exit or continue
+
+function exitMenu() {
+  confirm(
+    "Would you like to continue?".then(
+      function confirmed() {
+        employeeApp();
+      },
+      function cancelled() {
+        exit();
+      }
+    )
+  );
+}
+
+// closes the employee manager app
+
+function exit() {
+  console.log("Exiting Employee Manager App");
+  db.end();
+  process.exit();
+}
