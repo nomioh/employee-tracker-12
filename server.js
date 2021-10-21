@@ -1,26 +1,16 @@
 const inquirer = require("inquirer");
 const confirm = require("inquirer-confirm");
-const mysql = require("mysql2");
+const db = require("./db/connection");
 require("dotenv").config();
 const cTable = require("console.table");
-
-const port = process.env.port || 3000;
-
-// mysql
-
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "Jingers.5",
-  database: "employees_db",
-});
 
 // create the connection to mysql database
 db.connect(function (error) {
   if (error) throw error;
   console.log("Welcome to Employee Manager");
+
   db.query("SELECT * FROM role", function (error, res) {
-    roles = res.map((dept) => ({
+    roles = res.map((role) => ({
       name: role.title,
       value: role.id,
     }));
@@ -260,7 +250,7 @@ function newEmployee(data) {
 
 function updateRole(data) {
   db.query(
-    `UPDATE emplpoyee SET role_id = ${data.titleID} WHERE id=${data.employeesID}`,
+    `UPDATE employee SET role_id = ${data.titleID} WHERE id=${data.employeesID}`,
     function (error, res) {
       if (error) throw error;
     }
@@ -271,15 +261,13 @@ function updateRole(data) {
 //exit menu for user to exit or continue
 
 function exitMenu() {
-  confirm(
-    "Would you like to continue?".then(
-      function confirmed() {
-        employeeApp();
-      },
-      function cancelled() {
-        exit();
-      }
-    )
+  confirm("Would you like to continue?").then(
+    function confirmed() {
+      employeeApp();
+    },
+    function cancelled() {
+      exit();
+    }
   );
 }
 
